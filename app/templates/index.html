@@ -24,6 +24,16 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=initAutocomplete"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY"></script>
+
+	{%- block metas %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{%- endblock metas %}
+
+	{%- block styles %}
+	<!-- Bootstrap -->
+	<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+	{%- endblock styles %}
+	
 	{%- endblock head %}
 </head>
 
