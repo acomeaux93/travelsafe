@@ -27,8 +27,8 @@ def data():
 
 
     test_data = ["Copper", 8.94, "#b87333"]
-    
 
+    print("putting some bs change in here why is git commit not working")
     print("this is the test data")
     print(test_data)
 
