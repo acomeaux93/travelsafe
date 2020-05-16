@@ -5,6 +5,7 @@
 {% extends "base.html" %}
 
 <head>
+	{%- block head %}
 	<!-- Global site tag (gtag.js) - Google Analytics -->
 	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166860859-1"></script>
 	<script>
@@ -23,6 +24,7 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=initAutocomplete"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY"></script>
+	{%- endblock head %}
 </head>
 
 {% block app_content %}
