@@ -3,6 +3,12 @@ from werkzeug.urls import url_parse
 from app.forms import LocationForm
 #from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
+from apscheduler.schedulers.background import BackgroundScheduler
+from .scraper import save_us_state_data
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=1800)
+scheduler.start()
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
