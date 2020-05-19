@@ -15,6 +15,11 @@
 
 	  gtag('config', 'UA-166860859-1');
 	</script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+
+	<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
+
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -33,7 +38,7 @@
 	<!-- Bootstrap -->
 	<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
 	{%- endblock styles %}
-	
+
 	{%- endblock head %}
 </head>
 
@@ -45,11 +50,18 @@
 	<style>
 
 		body {
-			background-color: darkgrey;
+			background-color: #B0C4DE;
+			color: #696969;
+			font-family: "Open Sans",apple-system,blinkmacsystemfont,"Segoe UI","Helvetica Neue",arial,sans-serif;
+			font-size: 17px;
 		}
 
+	.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: Merriweather,serif;
+	}
+
 	.row {
-		background-color: lightgrey;
+		background-color: #F8F8FF;
 		margin: 10px;
 		padding: 15px;
 		box-shadow: 4px 4px 4px lightgrey;
@@ -60,18 +72,27 @@
 	}
 
 	.big-container {
-		background-color: darkgrey;
+		background-color: #B0C4DE;
 		color: black;
 	}
 
-	.location {
-			border: 1px solid darkgrey;
-	}
 
 	td {
 		border: 1px solid darkgrey;
 		margin: 10px;
 		padding: 10px;
+	}
+
+	.nav.navbar-nav.navbar-right li a {
+    color: white;
+	}
+
+	.green {
+		color: green;
+	}
+
+	.red {
+		color: red;
 	}
 
 	</style>
@@ -84,10 +105,8 @@
 		<br>
 		<br>
 		<br>
-    <div class="content row big-container border border-secondary" id="row q_container" >
-			<h1> Covid-19 Travel Checker </h1>
-			<h3> Enter your starting and ending destination to see data on the regions Covid-19 infections </h3>
-			<br>
+    <div class="content big-container border border-secondary" id="row q_container" >
+			<h1> Enter your starting and ending destination to see data on the regions Covid-19 infections</h1>
 
 			<div class="test">
 
@@ -95,18 +114,17 @@
 
 			<div class="row border border-secondary">
 				<div class="col-md-6 location">
-					<h2>Travel From</h2>
+					<h1>Travel From</h1>
 				 	<input type="text" class="form-control" name="from-search-term" id="from-search-term" size="50">
-
 				</div>
 				<div class="col-md-6 location">
-					<h2>Travel To</h2>
+					<h1>Travel To</h1>
 					<input type="text" class="form-control" name="to-search-term" id="to-search-term" size="50">
+					<br>
 				</div>
-				<br>
 				<div>
-					<input type="submit" value="Submit">
 
+					<input type="submit" value="Search" style="height:50px;width:100%; font-size:25px; color:white; background-color:#005eaa">
 				</div>
 			</div>
 
@@ -115,71 +133,129 @@
 
 
 					<div class="showlater">
+						<h2>Location: {{ start }}</h2>
+						<script type="text/javascript">
+					      // Load the Visualization API and the ColumnChart package.
+					      google.load('visualization', '1', {'packages':['corechart']});
+
+					      // Set a callback to run when the Google Visualization API is loaded.
+					      google.setOnLoadCallback(drawChart);
+
+					      // Callback that creates and populates a data table,
+					      // instantiates the pie chart, passes in the data and
+					      // draws it.
+					      function drawChart() {
+
+					        // Create our data table.
+					        var data = new google.visualization.DataTable();
+					        data.addColumn('string', 'Day');
+					        data.addColumn('number', 'New confirmed infections');
+					        data.addRows([
+					                // Instead of plugging in the values manually, or reading them
+					                // from a Data Source like Google Spreadsheets, feed them in
+					                // using Jinja, the templating system Flask uses.
+					                // Each iteration evaluates to something like this:
+					                // ['Saturday', 28],
+					                {% for item in google_from %}
+														['{{ item[0] }}', {{ item[1] }}],
+					                {% endfor %}
+					        ]);
+
+					        // Instantiate and draw our chart, passing in some options.  All the
+					        // options go into a single {}; some options' values go into a nested
+					        // {}. Some values, such as colors, must be given as strings.  The
+					        // Google Charts API is well-documented.
+					        var chart = new google.visualization.ColumnChart(
+					                document.getElementById('chart_div1'));
+
+									chart.draw(data,
+										{legend: 'none', vAxis: {scaleType: 'log', ticks:[1, 10, 100, 1000, 10000], baseline: 0, viewWindow: {min: 0, max: 10000}}, colors: ['#005eaa'], chartArea:{ width:'75%', height:'75%'} });
+					      }
+					    </script>
+
+						<div id="content">
+				        <h4>30 Day New Infection Record</h4>
+				        <div id="chart_div1" style=height:300px></div>
+				    </div>
 						<br>
-						<h2>{{ start }}</h2>
-						<div>
-						 <p>{{ test }}</p>
-						</div>
-
-						<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-					  <script type="text/javascript">
-					    google.charts.load("current", {packages:['corechart']});
-					    google.charts.setOnLoadCallback(drawChart);
-					    function drawChart() {
-					      var data = google.visualization.arrayToDataTable([
-							        ["Element", "Density", { role: "style" } ],
-							        {{ test }}
-							      ]);
-
-					      var view = new google.visualization.DataView(data);
-					      view.setColumns([0, 1,
-					                       { calc: "stringify",
-					                         sourceColumn: 1,
-					                         type: "string",
-					                         role: "annotation" },
-					                       2]);
-
-					      var options = {
-					        title: "Density of Precious Metals, in g/cm^3",
-					        width: 400,
-					        height: 400,
-					        bar: {groupWidth: "95%"},
-					        legend: { position: "none" },
-					      };
-					      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-					      chart.draw(view, options);
-					  }
-					  </script>
-					<div id="columnchart_values" style="width: 900px; height: 300px;"></div>
-
-						<h4>Milan, Italy: 30 day infection tally</h4>
-
-
-						<h5>There have been 32 new cases in the last 7 days</h5>
-						<h5>This is a 12% decrease from the week before </h5> <br>
-						<h5>New infections per 1000 people (7 day average): 3.2</h5>
+						<p>There have been <strong>{{ weekly_from }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
+						{% if direction_from == ' decrease' %}
+							<p>This is a <strong>{{ change_from }}% <span class="green">{{ direction_from }}</span></strong> from the week before </p> <br>
+						{% else %}
+							<p>This is a <strong>{{ change_from }}% <span class="red">{{ direction_from }}</span></strong> from the week before </p> <br>
+						{% endif %}
+						<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
 					</div>
 				</div>
 
 				<div class="col-md-6 location">
 
-					<div class="showlater">
-						<br>
-						<h2>{{ end }}</h2>
 
-						<h4>Perth, Austalia: 30 day infection tally</h4>
-						<img src="https://www.pythonprogramming.in/media/wysiwyg/matplotlib/mat-7.png" height="200px"> <br>
-						<h5>There have been 55 new cases in the last 7 days</h5>
-						<h5>This is a 5% increase from the week before </h5> <br>
-						<h5>New infections per 1000 people (7 day average): 1.9</h5>
+					<div class="showlater">
+						<h2>Location: {{ end }}</h2>
+						<script type="text/javascript">
+					      // Load the Visualization API and the ColumnChart package.
+					      google.load('visualization', '1', {'packages':['corechart']});
+
+					      // Set a callback to run when the Google Visualization API is loaded.
+					      google.setOnLoadCallback(drawChart);
+
+					      // Callback that creates and populates a data table,
+					      // instantiates the pie chart, passes in the data and
+					      // draws it.
+					      function drawChart() {
+
+					        // Create our data table.
+					        var data = new google.visualization.DataTable();
+					        data.addColumn('string', 'Day');
+					        data.addColumn('number', 'New confirmed infections');
+					        data.addRows([
+					                // Instead of plugging in the values manually, or reading them
+					                // from a Data Source like Google Spreadsheets, feed them in
+					                // using Jinja, the templating system Flask uses.
+					                // Each iteration evaluates to something like this:
+					                // ['Saturday', 28],
+					                {% for item in google_to %}
+														['{{ item[0] }}', {{ item[1] }}],
+					                {% endfor %}
+					        ]);
+
+					        // Instantiate and draw our chart, passing in some options.  All the
+					        // options go into a single {}; some options' values go into a nested
+					        // {}. Some values, such as colors, must be given as strings.  The
+					        // Google Charts API is well-documented.
+					        var chart = new google.visualization.ColumnChart(
+					                document.getElementById('chart_div2'));
+
+									chart.draw(data,
+										{legend: 'none', vAxis: {scaleType: 'log', ticks:[1, 10, 100, 1000, 10000], baseline: 0, viewWindow: {min: 0, max: 10000}}, colors: ['#005eaa'], chartArea:{ width:'75%', height:'75%'} });
+					      }
+					    </script>
+
+
+						<div id="content">
+				        <h4>30 Day New Infection Record</h4>
+				        <div id="chart_div2" style=height:300px></div>
+				    </div>
+						<br>
+
+
+
+						<p>There have been <strong>{{ weekly_to }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
+						{% if direction_to == ' decrease' %}
+							<p>This is a <strong>{{ change_to }}% <span class="green">{{ direction_to }}</span></strong> from the week before </p> <br>
+						{% else %}
+							<p>This is a <strong>{{ change_to }}% <span class="red">{{ direction_to }}</span></strong> from the week before </p> <br>
+						{% endif %}
+						<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
 					</div>
+					<br><br><br><br>
 				</div>
 
-				<br><br>
 
-				<br><br>
 
 				<div class="CDC map">
+					<br><br><br><br>
 					<!-- Markup for HTML (COVID-19 Travel Recommendations by Country: Search COVID-19 risk assessment by country larger map) --><div class='rid_de87adff_405292' data-apiroot='//tools.cdc.gov/api' data-mediatype='html' data-mediaid='405292' data-stripscripts='true' data-stripanchors='false' data-stripimages='false' data-stripcomments='true' data-stripstyles='true' data-cssclasses='syndicate,!no-syndicate' data-ids='' data-xpath='' data-oe='utf-8' data-of='xhtml' data-ns='cdc' data-postprocess='' data-nw='true' data-iframe='true' data-cdc-widget='syndicationIframe' data-apiembedsrc='//tools.cdc.gov/api/embed/html/js/embed-2.0.3.js' data-iframeembedsrc='//tools.cdc.gov/TemplatePackage/contrib/widgets/tp-widget-external-loader.js'></div><script src='//tools.cdc.gov/TemplatePackage/contrib/widgets/tp-widget-external-loader.js' ></script><noscript>You need javascript enabled to view this content or go to <a href='//tools.cdc.gov/api/v2/resources/media/405292/noscript'>source URL</a>.</noscript>
 				</div>
 				<br>
