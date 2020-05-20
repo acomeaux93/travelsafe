@@ -17,7 +17,8 @@ csp = {
         '\'unsafe-inline\'',
         'stackpath.bootstrapcdn.com',
         'code.jquery.com',
-        'cdn.jsdelivr.net'
+        'cdn.jsdelivr.net',
+        'cdnjs.cloudflare.com'
     ]
 }
 
