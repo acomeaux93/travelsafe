@@ -26,6 +26,7 @@ csp = {
  'script-src': [
         '\'self\'',
         'https://www.google.com/jsapi',
+        'https://tools.cdc.gov/TemplatePackage/contrib/widgets/tp-widget-external-loader.js',
     ]
 }
 
