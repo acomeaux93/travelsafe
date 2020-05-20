@@ -15,6 +15,9 @@
 
 	  gtag('config', 'UA-166860859-1');
 	</script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+
+	<script src="https://cdn.anychart.com/releases/8.0.0/js/anychart-base.min.js"></script>
 
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
@@ -24,6 +27,8 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=initAutocomplete" async defer></script>
 	<script src="auto-complete.js"></script> -->
 
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=initAutocomplete"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY"></script>
 
 	{%- block metas %}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,17 +95,6 @@
 		color: red;
 	}
 
-	.intro {
-		text-align: center;
-		vertical-align: middle;
-	}
-
-	#from_data, #to_data {
-		background-color: white;
-		padding: 10px;
-		border: 3px solid #005eaa;
-	}
-
 	</style>
 
 
@@ -112,17 +106,13 @@
 		<br>
 		<br>
     <div class="content big-container border border-secondary" id="row q_container" >
-
+			<h1> Enter your starting and ending destination to see data on the regions Covid-19 infections</h1>
 
 			<div class="test">
 
 			</div>
 
 			<div class="row border border-secondary">
-				<div class="intro">
-					<h1>Enter a "From" and "To" location to display Covid-19 infection data</h1>
-					<hr>
-				</div>
 				<div class="col-md-6 location">
 					<h1>Travel From</h1>
 				 	<input type="text" class="form-control" name="from-search-term" id="from-search-term" size="50">
@@ -141,11 +131,9 @@
 			<div class="row border border-secondary">
 				<div class="col-md-6 location">
 
-					<div id="from_data" style="display:none">
 
 					<div class="showlater">
 						<h2>Location: {{ start }}</h2>
-						<br>
 						<script type="text/javascript">
 					      // Load the Visualization API and the ColumnChart package.
 					      google.load('visualization', '1', {'packages':['corechart']});
@@ -180,45 +168,31 @@
 					        var chart = new google.visualization.ColumnChart(
 					                document.getElementById('chart_div1'));
 
-									var options = {
-										title: "30 Day New Infection Totals",
-										titleTextStyle: {fontName: 'Merriweather,serif', fontSize:20},
-										legend: 'none',
-										vAxis: {title: "Confirmed Infections", scaleType: 'log', ticks:[1, 10, 100, 1000, 10000],
-										baseline: 0,
-										viewWindow: {min: 0, max: 10000}},
-										colors: ['#005eaa'],
-										chartArea:{ width:'75%', height:'75%'},
-									};
-
-									chart.draw(data, options);
-
+									chart.draw(data,
+										{legend: 'none', vAxis: {scaleType: 'log', ticks:[1, 10, 100, 1000, 10000], baseline: 0, viewWindow: {min: 0, max: 10000}}, colors: ['#005eaa'], chartArea:{ width:'75%', height:'75%'} });
 					      }
 					    </script>
 
 						<div id="content">
+				        <h4>30 Day New Infection Record</h4>
 				        <div id="chart_div1" style=height:300px></div>
 				    </div>
 						<br>
-						<br>
-
-							<p>There have been <strong>{{ weekly_from }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
-							{% if direction_from == ' decrease' %}
-								<p>This is a <strong>{{ change_from }}% <span class="green">{{ direction_from }}</span></strong> from the week before </p> <br>
-							{% else %}
-								<p>This is a <strong>{{ change_from }}% <span class="red">{{ direction_from }}</span></strong> from the week before </p> <br>
-							{% endif %}
-							<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
-						</div>
+						<p>There have been <strong>{{ weekly_from }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
+						{% if direction_from == ' decrease' %}
+							<p>This is a <strong>{{ change_from }}% <span class="green">{{ direction_from }}</span></strong> from the week before </p> <br>
+						{% else %}
+							<p>This is a <strong>{{ change_from }}% <span class="red">{{ direction_from }}</span></strong> from the week before </p> <br>
+						{% endif %}
+						<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
 					</div>
 				</div>
 
 				<div class="col-md-6 location">
-					<div id="to_data" style="display:none">
+
 
 					<div class="showlater">
 						<h2>Location: {{ end }}</h2>
-						<br>
 						<script type="text/javascript">
 					      // Load the Visualization API and the ColumnChart package.
 					      google.load('visualization', '1', {'packages':['corechart']});
@@ -253,37 +227,27 @@
 					        var chart = new google.visualization.ColumnChart(
 					                document.getElementById('chart_div2'));
 
-									var options = {
-										title: "30 Day New Infection Totals",
-										titleTextStyle: {fontName: 'Merriweather,serif', fontSize:20},
-										legend: 'none',
-										vAxis: {title: "Confirmed Infections", scaleType: 'log', ticks:[1, 10, 100, 1000, 10000],
-										baseline: 0,
-										viewWindow: {min: 0, max: 10000}},
-										colors: ['#005eaa'],
-										chartArea:{ width:'75%', height:'75%'},
-									};
-
-									chart.draw(data, options);
+									chart.draw(data,
+										{legend: 'none', vAxis: {scaleType: 'log', ticks:[1, 10, 100, 1000, 10000], baseline: 0, viewWindow: {min: 0, max: 10000}}, colors: ['#005eaa'], chartArea:{ width:'75%', height:'75%'} });
 					      }
 					    </script>
 
 
 						<div id="content">
+				        <h4>30 Day New Infection Record</h4>
 				        <div id="chart_div2" style=height:300px></div>
 				    </div>
 						<br>
-						<br>
 
 
-							<p>There have been <strong>{{ weekly_to }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
-							{% if direction_to == ' decrease' %}
-								<p>This is a <strong>{{ change_to }}% <span class="green">{{ direction_to }}</span></strong> from the week before </p> <br>
-							{% else %}
-								<p>This is a <strong>{{ change_to }}% <span class="red">{{ direction_to }}</span></strong> from the week before </p> <br>
-							{% endif %}
-							<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
-						</div>
+
+						<p>There have been <strong>{{ weekly_to }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
+						{% if direction_to == ' decrease' %}
+							<p>This is a <strong>{{ change_to }}% <span class="green">{{ direction_to }}</span></strong> from the week before </p> <br>
+						{% else %}
+							<p>This is a <strong>{{ change_to }}% <span class="red">{{ direction_to }}</span></strong> from the week before </p> <br>
+						{% endif %}
+						<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
 					</div>
 					<br><br><br><br>
 				</div>
@@ -303,38 +267,6 @@
 		</div>
 		</form>
 	</div>
-
-	<script type="text/javascript">
-		function fromShow() {
-			var x = document.getElementById("from_data");
-				console.log(x);
-				if (x.style.display === "none") {
-					x.style.display = "block";
-				}
-		}
-	</script>
-
-	{% if search_from == 'true' %}
-		<script type="text/javascript">
-			fromShow();
-		</script>
-	{% endif %}
-
-	<script type="text/javascript">
-		function toShow() {
-			var x = document.getElementById("to_data");
-				console.log(x);
-				if (x.style.display === "none") {
-					x.style.display = "block";
-				}
-		}
-	</script>
-
-	{% if search_to == 'true' %}
-		<script type="text/javascript">
-			toShow();
-		</script>
-	{% endif %}
 
 	<script>
 		function activatePlacesSearch(){

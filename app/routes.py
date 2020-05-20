@@ -148,7 +148,9 @@ def data():
     else:
         print("not in the USA")
 
+    print("this is google array from")
     print(google_array_from)
+    print("this is google array to")
     print(google_array_to)
 
     return render_template('index.html', search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
