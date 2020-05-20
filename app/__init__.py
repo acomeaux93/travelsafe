@@ -18,7 +18,8 @@ csp = {
         'stackpath.bootstrapcdn.com',
         'code.jquery.com',
         'cdn.jsdelivr.net',
-        'cdnjs.cloudflare.com'
+        'cdnjs.cloudflare.com',
+        '*.trusted.com'
     ]
 }
 
