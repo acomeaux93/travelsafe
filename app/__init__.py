@@ -19,8 +19,10 @@ csp = {
         'code.jquery.com',
         'cdn.jsdelivr.net',
         'cdnjs.cloudflare.com',
-        '*.trusted.com'
-    ]
+        '*.trusted.com',
+
+    ],
+ 'script-src': '\'self\'',
 }
 
 talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
