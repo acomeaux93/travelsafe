@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 #from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
-from flask_talisman.GOOGLE_CSP_POLICY import Talisman
+from flask_talisman import Talisman
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -20,6 +20,7 @@ csp = {
         'cdn.jsdelivr.net',
         'cdnjs.cloudflare.com',
         '*.trusted.com',
+        'https://www.google.com/jsapi',
 
     ],
  'script-src': '\'self\'',
