@@ -34,8 +34,14 @@ csp = {
   'img-src': [
         '*',
         'https://www.google-analytics.com/',
+  ],
 
+  'style-src': [
+        'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
+        'https://www.gstatic.com/charts/48.1/css/util/util.css',
   ]
+
+
 }
 
 talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
