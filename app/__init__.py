@@ -27,6 +27,9 @@ csp = {
         '\'self\'',
         'https://www.google.com/jsapi',
         'https://tools.cdc.gov/TemplatePackage/contrib/widgets/tp-widget-external-loader.js',
+        'https://tools.cdc.gov/TemplatePackage/contrib/libs/jquery/1.12.4/jquery.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
     ]
 }
 
