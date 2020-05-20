@@ -23,7 +23,7 @@ csp = {
     ]
 }
 
-talisman = Talisman(app, content_security_policy=csp)
+talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
 # login = LoginManager(app)
 # login.login_view = 'login'
 
