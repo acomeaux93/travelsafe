@@ -6,6 +6,11 @@ from app import app, db
 from apscheduler.schedulers.background import BackgroundScheduler
 from .scraper import save_us_state_data
 from app.models import USState
+from flask_talisman import Talisman
+
+app = Flask(__name__)
+Talisman(app)
+
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=1800)
