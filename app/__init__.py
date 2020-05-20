@@ -41,6 +41,7 @@ csp = {
         'https://www.gstatic.com/charts/48.1/css/util/util.css',
         'stackpath.bootstrapcdn.com',
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
+        'https://www.gstatic.com/charts/48.1/css/core/tooltip.css',
         'code.jquery.com',
         '\'self\'',
         '\'unsafe-inline\'',
