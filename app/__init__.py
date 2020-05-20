@@ -30,7 +30,12 @@ csp = {
         'https://tools.cdc.gov/TemplatePackage/contrib/libs/jquery/1.12.4/jquery.js',
         'https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
-    ]
+    ],
+  'img-src': [
+        '*',
+        'https://www.google-analytics.com/',
+
+  ]
 }
 
 talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
