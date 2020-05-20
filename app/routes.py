@@ -21,18 +21,24 @@ def index():
     print("testingtestingbuttonsmash")
     from_location = ""
     to_location = ""
+    search_from = "false"
+    search_to = "false"
     #print(request.form['from-search-term'])
 
-    return render_template('index.html', title='Teacher Home', start=from_location, end=to_location)
+    return render_template('index.html', search_from=search_from, search_to=search_to, title='Teacher Home', start=from_location, end=to_location)
 
 @app.route('/data', methods=['GET', 'POST'])
 def data():
 
     google_array_from = []
     google_array_to = []
+    search_from = "false"
+    search_to = "false"
 
     #THIS IS THE CODE FOR THE "FROM" SECTION
     from_location = request.form["from-search-term"]
+    if len(from_location) > 0:
+        search_from = "true"
     from_array = [x.strip() for x in from_location.split(',')]
     if from_array[(len(from_array) - 1)] == "USA":
         print("it's in the USA")
@@ -88,6 +94,8 @@ def data():
 
     #THIS IS THE CODE FOR THE "TO" SECTION
     to_location = request.form["to-search-term"]
+    if len(to_location) > 0:
+        search_to = "true"
     to_array = [x.strip() for x in to_location.split(',')]
     if to_array[(len(to_array) - 1)] == "USA":
         print("it's in the USA")
@@ -143,4 +151,4 @@ def data():
     print(google_array_from)
     print(google_array_to)
 
-    return render_template('index.html', start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
+    return render_template('index.html', search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
