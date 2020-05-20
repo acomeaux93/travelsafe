@@ -146,7 +146,7 @@
 					<div class="showlater">
 						<h2>Location: {{ start }}</h2>
 						<br>
-						<script type="text/javascript">
+						<script type="text/javascript" nonce="{{ csp_nonce() }}" >
 					      // Load the Visualization API and the ColumnChart package.
 					      google.load('visualization', '1', {'packages':['corechart']});
 
@@ -219,7 +219,7 @@
 					<div class="showlater">
 						<h2>Location: {{ end }}</h2>
 						<br>
-						<script type="text/javascript">
+						<script type="text/javascript" nonce="{{ csp_nonce() }}">
 					      // Load the Visualization API and the ColumnChart package.
 					      google.load('visualization', '1', {'packages':['corechart']});
 
@@ -304,7 +304,7 @@
 		</form>
 	</div>
 
-	<script type="text/javascript">
+	<script type="text/javascript" nonce="{{ csp_nonce() }}">
 		function fromShow() {
 			var x = document.getElementById("from_data");
 				console.log(x);
@@ -315,12 +315,12 @@
 	</script>
 
 	{% if search_from == 'true' %}
-		<script type="text/javascript">
+		<script type="text/javascript" nonce="{{ csp_nonce() }}">
 			fromShow();
 		</script>
 	{% endif %}
 
-	<script type="text/javascript">
+	<script type="text/javascript" nonce="{{ csp_nonce() }}">
 		function toShow() {
 			var x = document.getElementById("to_data");
 				console.log(x);
@@ -331,12 +331,12 @@
 	</script>
 
 	{% if search_to == 'true' %}
-		<script type="text/javascript">
+		<script type="text/javascript" nonce="{{ csp_nonce() }}">
 			toShow();
 		</script>
 	{% endif %}
 
-	<script>
+	<script nonce="{{ csp_nonce() }}">
 		function activatePlacesSearch(){
 			var inputTo = document.getElementById('to-search-term');
 			var inputFrom = document.getElementById('from-search-term')
@@ -344,7 +344,7 @@
 			var autocompleteFrom = new google.maps.places.Autocomplete(inputFrom);
 		}
 	</script>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=activatePlacesSearch"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=activatePlacesSearch" nonce="{{ csp_nonce() }}"></script>
 
 
 {% endblock %}
