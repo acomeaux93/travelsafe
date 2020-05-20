@@ -14,7 +14,10 @@ migrate = Migrate(app,db)
 csp = {
  'default-src': [
         '\'self\'',
-        'cdnjs.cloudflare.com'
+        '\'unsafe-inline\'',
+        'stackpath.bootstrapcdn.com',
+        'code.jquery.com',
+        'cdn.jsdelivr.net'
     ]
 }
 
