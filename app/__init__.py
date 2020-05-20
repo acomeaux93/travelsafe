@@ -8,11 +8,17 @@ from flask_talisman import Talisman
 
 app = Flask(__name__)
 app.config.from_object(Config)
-Talisman(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
 
+csp = {
+ 'default-src': [
+        '\'self\'',
+        'cdnjs.cloudflare.com'
+    ]
+}
 
+talisman = Talisman(app, content_security_policy=csp)
 # login = LoginManager(app)
 # login.login_view = 'login'
 
