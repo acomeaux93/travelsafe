@@ -50,6 +50,11 @@ csp = {
         'cdnjs.cloudflare.com',
         '*.trusted.com',
         'https://www.google.com/jsapi'
+  ],
+
+  'frame-src':[
+    '\'self\'',
+    'https://www.cdc.gov/',
   ]
 
 
