@@ -23,7 +23,10 @@ csp = {
         'https://www.google.com/jsapi',
 
     ],
- 'script-src': '\'self\'',
+ 'script-src': [
+        '\'self\'',
+        'https://www.google.com/jsapi',
+    ]
 }
 
 talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
