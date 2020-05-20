@@ -42,6 +42,14 @@ csp = {
         'stackpath.bootstrapcdn.com',
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
         'code.jquery.com',
+        '\'self\'',
+        '\'unsafe-inline\'',
+        'stackpath.bootstrapcdn.com',
+        'code.jquery.com',
+        'cdn.jsdelivr.net',
+        'cdnjs.cloudflare.com',
+        '*.trusted.com',
+        'https://www.google.com/jsapi'
   ]
 
 
