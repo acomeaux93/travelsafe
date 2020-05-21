@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+<head>
+	{%- block head %}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166860859-1" nonce="{{ csp_nonce() }}"></script>
+	<script nonce="{{ csp_nonce() }}">
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-166860859-1');
+	</script>
+
+	<script type="text/javascript" src="https://www.google.com/jsapi" nonce="{{ csp_nonce() }}"></script>
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=initAutocomplete" async defer></script>
+	<script src="auto-complete.js"></script> -->
+
+
+	{%- block metas %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{%- endblock metas %}
+
+	{%- block styles %}
+	<!-- Bootstrap -->
+	<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+	{%- endblock styles %}
+
+	{%- endblock head %}
+</head>
+
+{% block app_content %}
+
+
+	<style>
+
+		body {
+			background-color: #B0C4DE;
+			color: #696969;
+			font-family: "Open Sans",apple-system,blinkmacsystemfont,"Segoe UI","Helvetica Neue",arial,sans-serif;
+			font-size: 17px;
+		}
+
+	.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: Merriweather,serif;
+		color: #696969;
+	}
+
+	.outer-row {
+		background-color: #F8F8FF;
+		margin: 10px;
+		padding: 15px;
+		box-shadow: 4px 4px 4px lightgrey;
+	}
+
+	.row {
+		margin: 10px;
+		padding: 15px;
+	}
+
+	.classroom:hover {
+		box-shadow: 8px 8px 8px lightgrey;
+	}
+
+	.big-container {
+		background-color: #B0C4DE;
+		color: black;
+	}
+
+
+	td {
+		border: 1px solid darkgrey;
+		margin: 10px;
+		padding: 10px;
+	}
+
+	.nav.navbar-nav.navbar-right li a {
+    color: white;
+	}
+
+	.green {
+		color: green;
+	}
+
+	.red {
+		color: red;
+	}
+
+
+	#from_data, #to_data {
+		background-color: white;
+		padding: 10px;
+		border: 3px solid #005eaa;
+	}
+
+	.small {
+		font-size: 12px;
+	}
+
+	.vertical-center {
+	  margin: 0;
+	  position: absolute;
+	  top: 50%;
+	  -ms-transform: translateY(-50%);
+	  transform: translateY(-50%);
+	}
+
+	.row{
+  	position: relative;
+	}
+
+	.element{
+	  position: absolute;
+	  top: 50%;
+	  transform: translateY(-50%);
+	}
+
+	.mini-box{
+		background-color: white;
+		box-shadow: 4px 4px 4px lightgrey;
+		margin: 5px;
+	}
+
+	</style>
+
+
+  <div class="container">
+    <br>
+    <br>
+    <br>
+		<br>
+    <br>
+    <br>
+    <div class="content big-container border border-secondary" id="row q_container" >
+        <div class="row outer-row border border-secondary">
+					<h1>travelsafelive@gmail.com</h1>
+				</div>
+    </div>
+
+
+  	{% endblock %}

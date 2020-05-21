@@ -29,3 +29,9 @@ class Countries(db.Model):
     cases = db.Column(db.String(64))
     deaths = db.Column(db.String(64))
     recovered = db.Column(db.String(64))
+
+class USReference(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    full_state_name = db.Column(db.String(64))
+    state_abbreviation = db.Column(db.String(2))
+    state_population = db.Column(db.Integer())

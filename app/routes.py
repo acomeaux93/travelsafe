@@ -1,17 +1,14 @@
 from flask import render_template, flash, redirect, url_for, request
 from werkzeug.urls import url_parse
-from app.forms import LocationForm
+from app.forms import LocationForm, AlertForm
 #from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from apscheduler.schedulers.background import BackgroundScheduler
 from .scraper import save_us_state_data
 from app.models import USState
-from flask import Flask
-from flask_talisman import Talisman
-
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=1800)
+scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=60)
 scheduler.start()
 
 @app.route('/')
@@ -62,13 +59,18 @@ def data():
         print("this is the stat array")
         print(stat_array_from)
 
+        stat_array_from_clean = []
+        for value in stat_array_from:
+            if int(value) > 0:
+                stat_array_from_clean.append(value)
+
         last_seven_days_from = []
         last_seven_total_from = 0
         seven_before_total_from = 0
         for i in range(7):
-            last_seven_days_from.append(stat_array_from[i])
-            last_seven_total_from += int(stat_array_from[i])
-            seven_before_total_from += int(stat_array_from[i + 7])
+            last_seven_days_from.append(stat_array_from_clean[i])
+            last_seven_total_from += int(stat_array_from_clean[i])
+            seven_before_total_from += int(stat_array_from_clean[i + 7])
 
 
         print("this is the last 7 days")
@@ -157,3 +159,22 @@ def data():
     print(google_array_to)
 
     return render_template('index.html', search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
+
+
+@app.route('/alerts', methods=['GET', 'POST'])
+def alerts():
+    form = AlertForm()
+
+    if request.method == 'POST':
+        test = form.daily_input.data
+        print(test)
+        location = request.form["location"]
+        print(location)
+
+    return render_template('alerts.html', form=form)
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+
+    return render_template('contact.html')

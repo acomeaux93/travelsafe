@@ -10,11 +10,13 @@ def save_us_state_data():
     USState.query.delete()
     db.session.commit()
 
+    resp = ""
     resp = requests.get(us_states_url)
+    print(resp.json())
     if resp.status_code == 200:
         for data in resp.json():
             date = str(data.get("date"))
-            print(date[4:6])
+            #print(date[4:6])
             month = ""
             if(date[4:6] == '01'):
                 month = "Jan "
@@ -43,19 +45,19 @@ def save_us_state_data():
             day = date[6:8]
 
             clean = month + day
-            print(clean)
+            #print(clean)
 
             state = data.get("state")
             positive = data.get("positive")
             positive_increase = data.get("positiveIncrease")
 
-            print(date)
-            print(state)
-            print(positive_increase)
-            print()
+            # print(date)
+            # print(state)
+            # print(positive_increase)
+            # print()
 
-            with app.app_context():
-                us_state_data = USState(
-                    date=date, clean_date=clean, state=state, positive=positive, positive_increase=positive_increase)
-                db.session.add(us_state_data)
-                db.session.commit()
+            # with app.app_context():
+            #     us_state_data = USState(
+            #         date=date, clean_date=clean, state=state, positive=positive, positive_increase=positive_increase)
+            #     db.session.add(us_state_data)
+            #     db.session.commit()

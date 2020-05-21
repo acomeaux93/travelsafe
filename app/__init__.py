@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 from flask_talisman import Talisman
 
 app = Flask(__name__)
+
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app,db)
@@ -61,16 +62,20 @@ csp = {
 
 }
 
-talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
+
 # login = LoginManager(app)
 # login.login_view = 'login'
 
+talisman = Talisman(app, content_security_policy=csp, content_security_policy_nonce_in=['script-src'])
 bootstrap = Bootstrap(app)
 
 #These are at the bottom because of the chance for circular dependancies. What are those?
 
 #THIS LINE COMMENTED OUT TEMPORARILY BECAUSE THERE ARE NO MODELS YET
 from app import routes, models
+
+
+
 
     # with app.app_context():
     #     from app import routes

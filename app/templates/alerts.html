@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+<head>
+	{%- block head %}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166860859-1" nonce="{{ csp_nonce() }}"></script>
+	<script nonce="{{ csp_nonce() }}">
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-166860859-1');
+	</script>
+
+	<script type="text/javascript" src="https://www.google.com/jsapi" nonce="{{ csp_nonce() }}"></script>
+
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=initAutocomplete" async defer></script>
+	<script src="auto-complete.js"></script> -->
+
+
+	{%- block metas %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{%- endblock metas %}
+
+	{%- block styles %}
+	<!-- Bootstrap -->
+	<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+	{%- endblock styles %}
+
+	{%- endblock head %}
+</head>
+
+{% block app_content %}
+
+
+	<style>
+
+		body {
+			background-color: #B0C4DE;
+			color: #696969;
+			font-family: "Open Sans",apple-system,blinkmacsystemfont,"Segoe UI","Helvetica Neue",arial,sans-serif;
+			font-size: 17px;
+		}
+
+	.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    font-family: Merriweather,serif;
+		color: #696969;
+	}
+
+	.outer-row {
+		background-color: #F8F8FF;
+		margin: 10px;
+		padding: 15px;
+		box-shadow: 4px 4px 4px lightgrey;
+	}
+
+	.row {
+		margin: 10px;
+		padding: 15px;
+	}
+
+	.classroom:hover {
+		box-shadow: 8px 8px 8px lightgrey;
+	}
+
+	.big-container {
+		background-color: #B0C4DE;
+		color: black;
+	}
+
+
+	td {
+		border: 1px solid darkgrey;
+		margin: 10px;
+		padding: 10px;
+	}
+
+	.nav.navbar-nav.navbar-right li a {
+    color: white;
+	}
+
+	.green {
+		color: green;
+	}
+
+	.red {
+		color: red;
+	}
+
+
+	#from_data, #to_data {
+		background-color: white;
+		padding: 10px;
+		border: 3px solid #005eaa;
+	}
+
+	.small {
+		font-size: 12px;
+	}
+
+	.vertical-center {
+	  margin: 0;
+	  position: absolute;
+	  top: 50%;
+	  -ms-transform: translateY(-50%);
+	  transform: translateY(-50%);
+	}
+
+	.row{
+  	position: relative;
+	}
+
+	.element{
+	  position: absolute;
+	  top: 50%;
+	  transform: translateY(-50%);
+	}
+
+	.mini-box{
+		background-color: white;
+		box-shadow: 4px 4px 4px lightgrey;
+		margin: 5px;
+	}
+
+	</style>
+
+
+	<div class="container">
+		<form action="/alerts" method="post">
+			{{ form.hidden_tag() }}
+		<br>
+		<br>
+		<br>
+		<div class="content big-container border border-secondary" id="row q_container" >
+
+
+				<div class="row outer-row border border-secondary">
+					<div class="intro">
+						<h1>Want to know first when infection rates change in your area?</h1><br>
+						<h2>Enter a location and desired Covid-19 infection statistic to track, then register your phone or email to recieve a text alert when infection statistics hit your threshold</h2>
+					</div>
+				</div>
+				<div class="row outer-row border border-secondary"
+					<div class="col-md-6 location">
+						<h1>Enter Location</h1>
+						<input type="text" class="form-control" name="location" id="location" size="50">
+						<br>
+						<p class="small">*Note: the most specific data avaliable is regional. For example, a request for data in "Seattle, Washington" will return data for "Washington"*</p>
+					</div>
+				</div>
+
+				<div class="row outer-row border border-secondary">
+					<div class="col-md-8 location">
+						<h3>Alert Me When...</h3>
+					<div class="mini-box">
+						<div class="row border border-secondary">
+							<div class="col-md-5 location">
+								<p>Daily confirmed infections are</p>
+							</div>
+							<div class="col-md-4 location">
+									{{ form.daily_input_radio }}
+							</div>
+							<div clss="col-md-4 location">
+									{{ form.daily_input(size=16, placeholder="enter a number") }}
+							</div>
+						</div>
+					</div>
+
+					<div class="mini-box">
+						<div class="row border border-secondary">
+							<div class="col-md-5 location">
+								<p>Seven day infection count is</p>
+							</div>
+							<div class="col-md-4 location">
+								{{ form.seven_day_radio }}
+							</div>
+							<div clss="col-md-4 location">
+									{{ form.seven_day(size=16, placeholder="enter a number") }}
+							</div>
+						</div>
+					</div>
+
+					<div class="mini-box">
+						<div class="row border border-secondary">
+							<div class="col-md-5 location">
+								<p>Weekly percent drop in infections is</p>
+							</div>
+							<div class="col-md-4 location">
+								{{ form.weekly_change_radio }}
+							</div>
+							<div clss="col-md-4 location">
+									{{ form.weekly_change(size=16, placeholder="enter a percentage") }}
+							</div>
+						</div>
+					</div>
+
+					<div class="mini-box">
+						<div class="row border border-secondary">
+							<div class="col-md-5 location">
+								<p>Average new infections per 1000 residents is</p>
+							</div>
+							<div class="col-md-4 location">
+								{{ form.per_1000_radio }}
+							</div>
+							<div clss="col-md-4 location">
+									{{ form.per_1000(size=16, placeholder="enter a number") }}
+							</div>
+						</div>
+					</div>
+
+					</div>
+
+					<div class="col-md-4 location">
+						<h3> Alert By Email, Text, Or Both </h3>
+						<div class="row mini-box border border-secondary">
+							<svg class="bi bi-envelope" width="5em" height="5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" d="M14 3H2a1 1 0 00-1 1v8a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1zM2 2a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+							  <path fill-rule="evenodd" d="M.071 4.243a.5.5 0 01.686-.172L8 8.417l7.243-4.346a.5.5 0 01.514.858L8 9.583.243 4.93a.5.5 0 01-.172-.686z" clip-rule="evenodd"/>
+							  <path d="M6.752 8.932l.432-.252-.504-.864-.432.252.504.864zm-6 3.5l6-3.5-.504-.864-6 3.5.504.864zm8.496-3.5l-.432-.252.504-.864.432.252-.504.864zm6 3.5l-6-3.5.504-.864 6 3.5-.504.864z"/>
+							</svg>
+							<br>
+							<div class="col-md-3 location">
+								<p>Email:</p>
+							</div>
+							<div clss="col-md-9 location">
+									{{ form.email_input(size=20, placeholder="enter email address") }}
+							</div>
+						</div>
+
+						<br><br>
+
+						<div class="row mini-box border border-secondary">
+							<svg class="bi bi-chat-dots" width="5em" height="5em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" d="M2.678 11.894a1 1 0 01.287.801 10.97 10.97 0 01-.398 2c1.395-.323 2.247-.697 2.634-.893a1 1 0 01.71-.074A8.06 8.06 0 008 14c3.996 0 7-2.807 7-6 0-3.192-3.004-6-7-6S1 4.808 1 8c0 1.468.617 2.83 1.678 3.894zm-.493 3.905a21.682 21.682 0 01-.713.129c-.2.032-.352-.176-.273-.362a9.68 9.68 0 00.244-.637l.003-.01c.248-.72.45-1.548.524-2.319C.743 11.37 0 9.76 0 8c0-3.866 3.582-7 8-7s8 3.134 8 7-3.582 7-8 7a9.06 9.06 0 01-2.347-.306c-.52.263-1.639.742-3.468 1.105z" clip-rule="evenodd"/>
+							  <path d="M5 8a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z"/>
+							</svg>
+							<br>
+							<div class="col-md-3 location">
+								<p>Text:</p>
+							</div>
+							<div clss="col-md-9 location">
+									{{ form.phone_input(size=20, placeholder="(ex. 1-425-293-3660)") }}
+							</div>
+							<br>
+							<p class="small"> *Enter phone number WITH country code* </p>
+						</div>
+					</div>
+
+
+					</div>
+
+					<div>
+						<input type="submit" value="Register" style="height:50px;width:100%; font-size:25px; color:white; background-color:#005eaa">
+					</div>
+				</div>
+				<br>
+				<br>
+				<br>
+				<br>
+				</div>
+
+		</div>
+	</div>
+
+	<script nonce="{{ csp_nonce() }}">
+		function activatePlacesSearch(){
+			var location = document.getElementById('location');
+			var autocompleteLocation = new google.maps.places.Autocomplete(location);
+		}
+	</script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6vy0W7oI24QRPSKWWFAIdYAb2Fg57URY&libraries=places&callback=activatePlacesSearch" nonce="{{ csp_nonce() }}"></script>
+
+	{% endblock %}
