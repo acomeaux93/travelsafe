@@ -1,4 +1,5 @@
 from flask import render_template, flash, redirect, url_for, request, make_response
+from datetime import datetime
 from werkzeug.urls import url_parse
 from app.forms import LocationForm, AlertForm
 #from flask_login import current_user, login_user, logout_user, login_required
@@ -34,6 +35,11 @@ def data():
     google_array_to = []
     search_from = "false"
     search_to = "false"
+
+    #Grab "From" and "To" info and save immediately to db
+    from_for_db = request.form["from-search-term"]
+    to_for_db = request.form["to-search-term"]
+    search_time = datetime.now(tz=None)
 
     #THIS IS THE CODE FOR THE "FROM" SECTION
 
