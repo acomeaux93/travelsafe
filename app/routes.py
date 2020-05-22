@@ -6,11 +6,14 @@ from app.forms import LocationForm, AlertForm
 from app import app, db
 from apscheduler.schedulers.background import BackgroundScheduler
 from .scraper import save_us_state_data
-from app.models import USState, USReference
+from app.models import USState, USReference, AlertRequests, LocationRequests
+import os
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=300)
-scheduler.start()
+
+if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=60)
+    scheduler.start()
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
@@ -40,6 +43,9 @@ def data():
     from_for_db = request.form["from-search-term"]
     to_for_db = request.form["to-search-term"]
     search_time = datetime.now(tz=None)
+    alert_log = LocationRequests(from_location=from_for_db, to_location=to_for_db, timestamp=search_time)
+    db.session.add(alert_log)
+    db.session.commit()
 
     #THIS IS THE CODE FOR THE "FROM" SECTION
 
@@ -203,8 +209,15 @@ def alerts():
     if request.method == 'POST':
         flash("Alert Settings Recorded")
         test = form.daily_input.data
-        print(test)
         location = request.form["location"]
+        search_time = datetime.now(tz=None)
+        print(test)
+        print("This is all the form data")
+        print(form.data)
+        alert_log = AlertRequests(alert_location=location, form_data=str(form.data), timestamp=search_time)
+        db.session.add(alert_log)
+        db.session.commit()
+
         print(location)
 
     return render_template('alerts.html', form=form)

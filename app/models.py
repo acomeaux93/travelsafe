@@ -35,3 +35,15 @@ class USReference(db.Model):
     full_state_name = db.Column(db.String(64))
     state_abbreviation = db.Column(db.String(2))
     state_population = db.Column(db.Integer())
+
+class LocationRequests(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    from_location = db.Column(db.String(64))
+    to_location = db.Column(db.String(64))
+    timestamp = db.Column(db.String(64))
+
+class AlertRequests(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    alert_location = db.Column(db.String(64))
+    form_data = db.Column(db.String())
+    timestamp = db.Column(db.String(64))

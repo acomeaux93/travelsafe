@@ -5,24 +5,34 @@ from app import app
 from datetime import datetime, timedelta
 from pathlib import Path
 import json
+import csv
+import pandas as pd
+import time
 
 
 def save_us_state_data():
+
     USState.query.delete()
     db.session.commit()
 
-    us_states_url = "https://covidtracking.com/api/v1/states/daily.json"
+    us_states_url = "https://covidtracking.com/api/v1/states/daily.csv"
 
     resp = requests.get(us_states_url)
+
+    print("time to sleep")
+    time.sleep(5)
+
     if resp.status_code == 200:
-        data = resp.json()
-        print(data)
-        print("This is the size of the array")
-        print(len(data))
-        for data in resp.json():
-            date = str(data.get("date"))
-            #print(date[4:6])
+        df = pd.read_csv(us_states_url)
+
+        for date, state, positive, positive_increase in zip(df["date"], df["state"], df["positive"], df["positiveIncrease"]):
+
+            if positive_increase == "nan":
+                positive_increase = 0
+
             month = ""
+            # print(date)
+            date = str(date)
             if(date[4:6] == '01'):
                 month = "Jan "
             elif(date[4:6] == '02'):
@@ -48,21 +58,16 @@ def save_us_state_data():
             elif(date[4:6] == '12'):
                 month = "Dec "
             day = date[6:8]
-
             clean = month + day
-            #print(clean)
 
-            state = data.get("state")
-            positive = data.get("positive")
-            positive_increase = data.get("positiveIncrease")
+            print(clean)
 
-            # print(date)
-            # print(state)
-            # print(positive_increase)
-            # print()
+            print(date)
+            print(state)
+            print(positive_increase)
+            print()
 
             with app.app_context():
-                us_state_data = USState(
-                    date=date, clean_date=clean, state=state, positive=positive, positive_increase=positive_increase)
+                us_state_data = USState(date=date, clean_date=clean, state=state, positive=positive, positive_increase=int(positive_increase))
                 db.session.add(us_state_data)
                 db.session.commit()
