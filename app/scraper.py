@@ -2,18 +2,23 @@ import requests
 from app import db
 from .models import USState
 from app import app
+from datetime import datetime, timedelta
+from pathlib import Path
+import json
 
 
 def save_us_state_data():
-    us_states_url = "https://covidtracking.com/api/v1/states/daily.json"
-
     USState.query.delete()
     db.session.commit()
 
-    resp = ""
+    us_states_url = "https://covidtracking.com/api/v1/states/daily.json"
+
     resp = requests.get(us_states_url)
-    print(resp.json())
     if resp.status_code == 200:
+        data = resp.json()
+        print(data)
+        print("This is the size of the array")
+        print(len(data))
         for data in resp.json():
             date = str(data.get("date"))
             #print(date[4:6])
@@ -56,8 +61,8 @@ def save_us_state_data():
             # print(positive_increase)
             # print()
 
-            # with app.app_context():
-            #     us_state_data = USState(
-            #         date=date, clean_date=clean, state=state, positive=positive, positive_increase=positive_increase)
-            #     db.session.add(us_state_data)
-            #     db.session.commit()
+            with app.app_context():
+                us_state_data = USState(
+                    date=date, clean_date=clean, state=state, positive=positive, positive_increase=positive_increase)
+                db.session.add(us_state_data)
+                db.session.commit()

@@ -31,6 +31,7 @@ csp = {
         'https://tools.cdc.gov/TemplatePackage/contrib/libs/jquery/1.12.4/jquery.js',
         'https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
+        'https://www.gstatic.com/charts/loader.js'
     ],
   'img-src': [
         '*',
@@ -43,6 +44,9 @@ csp = {
         'stackpath.bootstrapcdn.com',
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
         'https://www.gstatic.com/charts/48.1/css/core/tooltip.css',
+        'https://www.google.com/uds/api/visualization/1.0/36558b280aac4fa99ed8215e60015cff/ui+en.css',
+        'https://ajax.googleapis.com/ajax/static/modules/gviz/1.0/core/tooltip.css',
+        'https://ajax.googleapis.com/ajax/static/modules/gviz/1.0/core/tooltip.css',
         'code.jquery.com',
         '\'self\'',
         '\'unsafe-inline\'',

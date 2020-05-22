@@ -1,14 +1,14 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, make_response
 from werkzeug.urls import url_parse
 from app.forms import LocationForm, AlertForm
 #from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
 from apscheduler.schedulers.background import BackgroundScheduler
 from .scraper import save_us_state_data
-from app.models import USState
+from app.models import USState, USReference
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=60)
+scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=300)
 scheduler.start()
 
 @app.route('/')
@@ -36,14 +36,26 @@ def data():
     search_to = "false"
 
     #THIS IS THE CODE FOR THE "FROM" SECTION
+
+    #Pulls From value from form and parses
     from_location = request.form["from-search-term"]
     if len(from_location) > 0:
         search_from = "true"
     from_array = [x.strip() for x in from_location.split(',')]
+
+    #Checks Country designation of FROM. should replace this method with a search through the country database
     if from_array[(len(from_array) - 1)] == "USA":
         print("it's in the USA")
         state_code = from_array[(len(from_array) - 2)]
-        #TO DO: MAKE A SEPERATE TABLE TO CROSS REFERENCE STATE CODES FOR FULL STATE NAMES
+        state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
+        country_name_from = from_array[(len(from_array) - 1)]
+        region_name_from = state_reference.full_state_name
+        population_from = state_reference.state_population
+        population_from_clean = "{:,}".format(population_from)
+
+
+
+        #References the databse to pull 30-day information for graph
         state_stats = USState.query.filter_by(state=state_code).limit(30).all()
         stat_array_from = []
         for value in state_stats:
@@ -59,6 +71,8 @@ def data():
         print("this is the stat array")
         print(stat_array_from)
 
+        #Cleans data for processing for descriptive statistics
+        #Removes any zero entries from the database so that they are not included in the final calculation
         stat_array_from_clean = []
         for value in stat_array_from:
             if int(value) > 0:
@@ -72,6 +86,13 @@ def data():
             last_seven_total_from += int(stat_array_from_clean[i])
             seven_before_total_from += int(stat_array_from_clean[i + 7])
 
+
+        #computing the daily average from the last seven Days
+        seven_average = (last_seven_total_from / 7)
+        pop_denominator = (population_from / 1000)
+        per_1000_result_from = round((seven_average/pop_denominator), 3)
+        print("This is the daily new infections per 1000 residents")
+        print(per_1000_result_from)
 
         print("this is the last 7 days")
         print(last_seven_days_from)
@@ -158,7 +179,15 @@ def data():
     print("this is google array to")
     print(google_array_to)
 
-    return render_template('index.html', search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
+
+    #Cookies experimenting
+    resp = make_response(render_template('index.html', region_name_from=region_name_from, pop_from=population_from_clean, per_1000_from=per_1000_result_from, country_name_from=country_name_from, search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to ))
+
+    resp.set_cookie("flavor", "fudge")
+
+    return resp
+
+    # return render_template('index.html', res=res, region_name_from=region_name_from, pop_from=population_from_clean, per_1000_from=per_1000_result_from, country_name_from=country_name_from, search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
 
 
 @app.route('/alerts', methods=['GET', 'POST'])
@@ -166,6 +195,7 @@ def alerts():
     form = AlertForm()
 
     if request.method == 'POST':
+        flash("Alert Settings Recorded")
         test = form.daily_input.data
         print(test)
         location = request.form["location"]

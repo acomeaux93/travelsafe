@@ -16,7 +16,24 @@
 	  gtag('config', 'UA-166860859-1');
 	</script>
 
+	<title>Coronavirus Travel Planner</title>
+
+	<meta name="description" content="Custom coronavirus data. Search locations, view travel recommendations, create email and text alerts, plan for save travel during the ncov2019.live pandemic." />
+  <meta name="keywords" content="coronavirus, covid-19, travel, tracker, dashboard, preperation, alerts, trends, statistics, data" />
+
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="travelsafe.live - Coronavirus Travel Planner">
+	<meta property="og:description" content="Custom coronavirus data. Search locations, view travel recommendations, create email and text alerts, plan for save travel during the ncov2019.live pandemic.">
+	<meta property="og:image" content="https://i.ibb.co/VLpG82s/Screen-Shot-2020-05-22-at-2-30-02-PM.png">
+	<meta property="og:url" content="https://travelsafe.live/">
+
+	<meta name="twitter:title" content="travelsafe.live - Coronavirus Travel Planner">
+  <meta name="twitter:description" content="Custom coronavirus data. Search locations, view travel recommendations, create email and text alerts, plan for save travel during the ncov2019.live pandemic.">
+  <meta name="twitter:image" content="https://i.ibb.co/VLpG82s/Screen-Shot-2020-05-22-at-2-30-02-PM.png">
+  <meta name="twitter:card" content="summary_large_image"/>
+
 	<script type="text/javascript" src="https://www.google.com/jsapi" nonce="{{ csp_nonce() }}"></script>
+	<script src="https://www.gstatic.com/charts/loader.js" nonce="{{ csp_nonce() }}"></script>
 
 	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -111,6 +128,17 @@
 		color: #696969;
 	}
 
+	.data-box {
+		background-color: #F8F8FF;
+		box-shadow: 4px 4px 4px lightgrey;
+		margin: 10px;
+		padding: 10px;
+	}
+
+	.data-box:hover {
+		box-shadow: 8px 8px 8px lightgrey;
+	}
+
 	</style>
 
 
@@ -130,8 +158,11 @@
 
 			<div class="row border border-secondary">
 				<div class="intro">
-					<h1>Enter a "From" and "To" location to display Covid-19 infection data</h1>
+					<h1>When is it safe to travel?</h1>
+					<h2>This is the most current Covid-19 data</h2>
 					<hr>
+					<br>
+					<h3>Enter a "From" and "To" location to display Covid-19 infection data for those regions</h3>
 				</div>
 				<div class="col-md-6 location">
 					<h1>Travel From</h1>
@@ -154,14 +185,16 @@
 					<div id="from_data" style="display:none">
 
 					<div class="showlater">
-						<h2>Location: {{ start }}</h2>
+						<h2>Location: {{ region_name_from }}, {{ country_name_from }}</h2>
 						<br>
 						<script type="text/javascript" nonce="{{ csp_nonce() }}" >
 					      // Load the Visualization API and the ColumnChart package.
-					      google.load('visualization', '1', {'packages':['corechart']});
+					      //google.load('visualization', '1', {'packages':['corechart']});
+								google.charts.load('current', {packages: ['corechart']});
 
 					      // Set a callback to run when the Google Visualization API is loaded.
-					      google.setOnLoadCallback(drawChart);
+					      //google.setOnLoadCallback(drawChart);
+								google.charts.setOnLoadCallback(drawChart);
 
 					      // Callback that creates and populates a data table,
 					      // instantiates the pie chart, passes in the data and
@@ -210,15 +243,22 @@
 				        <div id="chart_div1" style=height:300px></div>
 				    </div>
 						<br>
-						<br>
 
-							<p>There have been <strong>{{ weekly_from }}</strong> new confimed cases in [LOCATION HERE] over the last seven recorded days</p>
-							{% if direction_from == ' decrease' %}
-								<p>This is a <strong>{{ change_from }}% <span class="green">{{ direction_from }}</span></strong> from the week before </p> <br>
-							{% else %}
-								<p>This is a <strong>{{ change_from }}% <span class="red">{{ direction_from }}</span></strong> from the week before </p> <br>
-							{% endif %}
-							<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
+							<div class="data-box">
+								<p>There have been <strong>{{ weekly_from }}</strong> new confimed cases in <strong>{{ region_name_from }}</strong> over the last seven recorded days</p>
+							</div>
+							<div class="data-box">
+								{% if direction_from == ' decrease' %}
+									<p>This is a <strong>{{ change_from }}% <span class="green">{{ direction_from }}</span></strong> from the week before </p> <br>
+								{% else %}
+									<p>This is a <strong>{{ change_from }}% <span class="red">{{ direction_from }}</span></strong> from the week before </p> <br>
+								{% endif %}
+							</div>
+							<div class="data-box">
+								<p>Daily new infections per 1,000 <strong>{{ region_name_from }}</strong> residents: <strong>{{ per_1000_from }}</strong> </p>
+								<p class="small">Population: {{ pop_from }}</p>
+							</div>
+							<br><br>
 							<p class="small">*Days with missing data are skipped during calculation*</p>
 						</div>
 					</div>
@@ -232,10 +272,12 @@
 						<br>
 						<script type="text/javascript" nonce="{{ csp_nonce() }}">
 					      // Load the Visualization API and the ColumnChart package.
-					      google.load('visualization', '1', {'packages':['corechart']});
+					      //google.load('visualization', '1', {'packages':['corechart']});
+									google.charts.load('current', {packages: ['corechart']});
 
 					      // Set a callback to run when the Google Visualization API is loaded.
-					      google.setOnLoadCallback(drawChart);
+					     // google.setOnLoadCallback(drawChart);
+							 		google.charts.setOnLoadCallback(drawChart);
 
 					      // Callback that creates and populates a data table,
 					      // instantiates the pie chart, passes in the data and
