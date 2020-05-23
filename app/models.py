@@ -36,6 +36,13 @@ class USReference(db.Model):
     state_abbreviation = db.Column(db.String(2))
     state_population = db.Column(db.Integer())
 
+class CountryReference(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    country_name = db.Column(db.String(64))
+    country_code = db.Column(db.String(8))
+    iso_code = db.Column(db.String(8))
+    population = db.Column(db.Integer())
+
 class LocationRequests(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     from_location = db.Column(db.String(64))
