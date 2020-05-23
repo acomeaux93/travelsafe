@@ -38,19 +38,31 @@ def data():
     google_array_from = []
     google_array_to = []
     stat_array_from = []
+    stat_array_to = []
     last_seven_comma_from = []
+    last_seven_comma_to = []
     stat_array_from_clean = []
+    stat_array_to_clean = []
     change_from = 0
+    change_to = 0
     direction_from = ""
-    stats = ""
+    direction_to = ""
+    stats_from = ""
+    stats_to = ""
     search_from = "false"
     search_to = "false"
     per_1000_result_from = 0
+    per_1000_result_to = 0
     region_name_from = ""
+    region_name_to = ""
     country_name_from = ""
+    country_name_to = ""
     region_display_from = ""
-    USA = "false"
+    region_display_to = '""'
+    USA_from = "false"
+    USA_to = "false"
     do_compute_from = "true"
+    do_compute_to = "true"
 
     #Grab "From" and "To" info and save immediately to db
     from_for_db = request.form["from-search-term"]
@@ -71,12 +83,12 @@ def data():
     #Checks Country designation of FROM. should replace this method with a search through the country database
     if from_array[(len(from_array) - 1)] == "USA":
         print("it's in the USA")
-        USA = "true"
+        USA_from = "true"
         state_code = from_array[(len(from_array) - 2)]
         state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
         country_name_from = from_array[(len(from_array) - 1)]
         region_name_from = (state_reference.full_state_name + ", ")
-        region_display_from = region_name_from
+        region_display_from = state_reference.full_state_name
         population_from = state_reference.state_population
         population_from_clean = "{:,}".format(population_from)
 
@@ -105,8 +117,8 @@ def data():
 
     #References the databse to pull 30-day information for graph
     if from_array[(len(from_array) - 1)] == "USA":
-        stats = USState.query.filter_by(state=state_code).limit(30).all()
-        for value in stats:
+        stats_from = USState.query.filter_by(state=state_code).limit(30).all()
+        for value in stats_from:
             stat_array_from.append(value.positive_increase)
             google_ind = []
             google_ind.append(value.clean_date)
@@ -198,12 +210,44 @@ def data():
     if len(to_location) > 0:
         search_to = "true"
     to_array = [x.strip() for x in to_location.split(',')]
+
     if to_array[(len(to_array) - 1)] == "USA":
         print("it's in the USA")
+        USA_to = "true"
         state_code = to_array[(len(to_array) - 2)]
-        state_stats = USState.query.filter_by(state=state_code).limit(30).all()
-        stat_array_to = []
-        for value in state_stats:
+        state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
+        country_name_to = to_array[(len(to_array) - 1)]
+        region_name_to = (state_reference.full_state_name + ", ")
+        region_display_to = state_reference.full_state_name
+        population_to = state_reference.state_population
+        population_to_clean = "{:,}".format(population_to)
+
+    else:
+        country_name_to = to_array[(len(to_array) - 1)]
+        region_display_to = country_name_to
+        print("This is the database result for a query that is not in the db")
+        country_reference = CountryReference.query.filter_by(country_name=country_name_to).first()
+        print(country_reference)
+        if country_reference is None:
+            print("yo the country reference was none")
+            stat_array_to = [1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            stat_array_to_clean = [1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+            do_compute_to = "false"
+            country_iso_code_to = ""
+            population_to = 1
+            population_to_clean = "{:,}".format(int(population_to))
+            region_display_to = "No data"
+            country_name_to = "No data for " + to_location
+        else:
+            country_iso_code_to = country_reference.iso_code
+            population_to = country_reference.population
+            population_to_clean = "{:,}".format(int(population_to))
+
+
+        #References the database to pull 30-day information for graph
+    if to_array[(len(to_array) - 1)] == "USA":
+        stats_to = USState.query.filter_by(state=state_code).limit(30).all()
+        for value in stats_to:
             stat_array_to.append(value.positive_increase)
             google_ind = []
             google_ind.append(value.clean_date)
@@ -213,38 +257,78 @@ def data():
 
         google_array_to.reverse()
 
-        print("this is the stat array")
-        print(stat_array_to)
+    elif do_compute_to == "true":
+        stats = Countries.query.filter_by(country_code=country_name_to).order_by(desc(Countries.date)).limit(30).all()
 
-        last_seven_days_to = []
-        last_seven_total_to = 0
-        seven_before_total_to = 0
+        for value in stats:
+            stat_array_to.append(value.cases)
+            google_ind = []
+            google_ind.append(value.clean_date)
+            google_ind.append(int(value.cases))
+            google_ind.append("blue")
+            google_array_to.append(google_ind)
+
+        google_array_to.reverse()
+
+    print("this is the google array right after it is made")
+    print(google_array_from)
+
+    print("this is the stat array")
+    print(stat_array_to)
+
+    print("This is the stat array from THAT KEEPS HAVING THE INDEX OUT OF RANGE ERROR")
+    print(stat_array_to_clean)
+    for value in stat_array_to:
+        if int(value) > 0:
+            stat_array_to_clean.append(value)
+
+    last_seven_days_to = []
+    last_seven_total_to = 0
+    seven_before_total_to = 0
+
+    if len(stat_array_to_clean) > 14:
+        for i in range(7):
+            last_seven_days_to.append(stat_array_to_clean[i])
+            last_seven_total_to += int(stat_array_to_clean[i])
+            seven_before_total_to += int(stat_array_to_clean[i + 7])
+    else:
         for i in range(7):
             last_seven_days_to.append(stat_array_to[i])
             last_seven_total_to += int(stat_array_to[i])
             seven_before_total_to += int(stat_array_to[i + 7])
 
+    #computing the daily average from the last seven Days
+    seven_average = (last_seven_total_to / 7)
+    pop_denominator = (population_to / 1000)
+    per_1000_result_to = round((seven_average/pop_denominator), 3)
+    print("this is the daily new infections per 1000 residents")
+    print(per_1000_result_to)
 
-        print("this is the last 7 days")
-        print(last_seven_days_to)
-        print("this is the 7 day total")
-        print(last_seven_total_to)
-        print("this is the 7 day total before that")
-        print(seven_before_total_to)
+    print("this is the last 7 days")
+    print(last_seven_days_to)
+    print("this is the 7 day total")
+    print(last_seven_total_to)
+    print("this is the 7 day total before that")
+    print(seven_before_total_to)
 
+    if seven_before_total_to > 0:
         week_difference_to = last_seven_total_to/seven_before_total_to
-        direction_to = ""
-        if week_difference_to < 1.0:
-            change_to = round(((1 - week_difference_to) * 100), 1)
-            direction_to = " decrease"
-        else:
-            change_to = round(((week_difference_to - 1) * 100), 1)
-            direction_to = " increase"
+    else:
+        week_difference_to = 0
 
-        print("This is the percentage change")
-        print(str(change_to) + direction_to)
 
-        last_seven_comma_to = "{:,}".format(last_seven_total_to)
+    direction_to = ""
+    if week_difference_to < 1.0:
+        change_to = round(((1 - week_difference_to) * 100), 1)
+        direction_to = " decrease"
+    else:
+        change_to = round(((week_difference_to - 1) * 100), 1)
+        direction_to = " increase"
+
+    print("This is the percentage change")
+    print(str(change_to) + direction_to)
+
+    last_seven_comma_to = "{:,}".format(last_seven_total_to)
 
 
     print("this is google array from")
@@ -254,7 +338,7 @@ def data():
 
 
     #Cookies experimenting
-    return render_template('index.html', region_display_from=region_display_from, region_name_from=region_name_from, pop_from=population_from_clean, per_1000_from=per_1000_result_from, country_name_from=country_name_from, search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
+    return render_template('index.html', region_display_to=region_display_to, region_name_to=region_name_to, country_name_to=country_name_to, pop_to=population_to_clean, per_1000_to=per_1000_result_to, region_display_from=region_display_from, region_name_from=region_name_from, pop_from=population_from_clean, per_1000_from=per_1000_result_from, country_name_from=country_name_from, search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )
 
 
     # return render_template('index.html', res=res, region_name_from=region_name_from, pop_from=population_from_clean, per_1000_from=per_1000_result_from, country_name_from=country_name_from, search_from=search_from, search_to=search_to, start=from_location, end=to_location, title="test chart", max=1000, values=stat_array_from, google_from=google_array_from, google_to=google_array_to, weekly_from=last_seven_comma_from, change_from=change_from, direction_from=direction_from, weekly_to=last_seven_comma_to, change_to=change_to, direction_to=direction_to )

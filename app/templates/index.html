@@ -239,9 +239,9 @@
 
 									var options = {
 										title: "30 Day New Infection Totals",
-										titleTextStyle: {fontName: 'Merriweather,serif', fontSize:20},
+										titleTextStyle: {fontName: 'Merriweather,serif', fontSize:20, color:'#696969'},
 										legend: 'none',
-										vAxis: {title: "Confirmed Infections", scaleType: 'log', ticks:[1, 10, 100, 1000, 10000, 100000],
+										vAxis: {title: "Confirmed Infections", scaleType: 'log', ticks:[1, 10, 100, 1000, 10000],
 										baseline: 0,
 										viewWindow: {min: 0, max: 100000}},
 										colors: ['#005eaa'],
@@ -256,7 +256,7 @@
 						<div id="content">
 				        <div id="chart_div1" style=height:300px></div>
 				    </div>
-						<br>
+						<hr>
 
 							<div class="data-box">
 								<p>There have been <strong>{{ weekly_from }}</strong> new confimed Covid-19 cases in <strong>{{ region_display_from }}</strong> over the last seven recorded days</p>
@@ -281,8 +281,9 @@
 					<div id="to_data" style="display:none">
 
 					<div class="showlater">
-						<h2>Location: {{ end }}</h2>
-						<br>
+						<h2>Location: {{ region_name_to }} {{ country_name_to }}</h2>
+						<p class="small">Population: {{ pop_to }}</p>
+						<hr>
 						<script type="text/javascript" nonce="{{ csp_nonce() }}">
 					      // Load the Visualization API and the ColumnChart package.
 					      //google.load('visualization', '1', {'packages':['corechart']});
@@ -321,9 +322,9 @@
 
 									var options = {
 										title: "30 Day New Infection Totals",
-										titleTextStyle: {fontName: 'Merriweather,serif', fontSize:20},
+										titleTextStyle: {fontName: 'Merriweather,serif', fontSize:20, color:'#696969'},
 										legend: 'none',
-										vAxis: {title: "Confirmed Infections", scaleType: 'log', ticks:[1, 10, 100, 1000, 10000, 100000],
+										vAxis: {title: "Confirmed Infections", scaleType: 'log', ticks:[1, 10, 100, 1000, 10000],
 										baseline: 0,
 										viewWindow: {min: 0, max: 100000}},
 										colors: ['#005eaa'],
@@ -338,17 +339,23 @@
 						<div id="content">
 				        <div id="chart_div2" style=height:300px></div>
 				    </div>
-						<br>
-						<br>
+						<hr>
 
-
-							<p>There have been <strong>{{ weekly_to }}</strong> new confimed cases in [LOCATION HERE] over the last seven days</p>
-							{% if direction_to == ' decrease' %}
-								<p>This is a <strong>{{ change_to }}% <span class="green">{{ direction_to }}</span></strong> from the week before </p> <br>
-							{% else %}
-								<p>This is a <strong>{{ change_to }}% <span class="red">{{ direction_to }}</span></strong> from the week before </p> <br>
-							{% endif %}
-							<p>Daily new infections per 1,000 [LOCATION] residents (seven day average): [STATISTIC] </p>
+							<div class="data-box">
+								<p>There have been <strong>{{ weekly_to }}</strong> new confimed Covid-19 cases in <strong>{{ region_display_to }}</strong> over the last seven recorded days</p>
+							</div>
+							<div class="data-box">
+								{% if direction_to == ' decrease' %}
+									<p>This is a <strong>{{ change_to }}% <span class="green">{{ direction_to }}</span></strong> from the week before </p> <br>
+								{% else %}
+									<p>This is a <strong>{{ change_to }}% <span class="red">{{ direction_to }}</span></strong> from the week before </p> <br>
+								{% endif %}
+							</div>
+							<div class="data-box">
+								<p>Daily new infections per 1,000 <strong>{{ region_display_to }}</strong> residents: <strong>{{ per_1000_to }}</strong> </p>
+							</div>
+							<br>
+							<p class="small">*Days with missing data are skipped during calculation*</p>
 						</div>
 					</div>
 					<br><br><br><br>
