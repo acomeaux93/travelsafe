@@ -16,6 +16,49 @@ if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
     scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=18000)
     scheduler.start()
 
+@app.route("/sitemap")
+@app.route("/sitemap/")
+@app.route("/sitemap.xml")
+def sitemap():
+    """
+        Route to dynamically generate a sitemap of your website/application.
+        lastmod and priority tags omitted on static pages.
+        lastmod included on dynamic content such as blog posts.
+    """
+    from flask import make_response, request, render_template
+    import datetime
+    from urllib.parse import urlparse
+
+    host_components = urlparse(request.host_url)
+    host_base = host_components.scheme + "://" + host_components.netloc
+
+    # Static routes with static content
+    static_urls = list()
+    for rule in app.url_map.iter_rules():
+        if not str(rule).startswith("/admin") and not str(rule).startswith("/robots.txt"):
+            if "GET" in rule.methods and len(rule.arguments) == 0:
+                url = {
+                    "loc": f"{host_base}{str(rule)}"
+                }
+                static_urls.append(url)
+
+
+
+    xml_sitemap = render_template("/sitemap_template.xml", static_urls=static_urls, host_base=host_base)
+    response = make_response(xml_sitemap)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response
+
+
+## LIVE VERSION ####
+@app.route('/robots.txt/')
+def robots():
+    return("User-agent: *\nDisallow: /admin/\nDisallow: /auth/\nDisallow: /panel/")
+
+
+
+
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 
