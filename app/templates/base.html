@@ -1,3 +1,6 @@
+{% import "bootstrap/utils.html" as utils %}
+{% import "bootstrap/wtf.html" as wtf %}
+
 {% extends 'bootstrap/base.html' %}
 
 <style>
@@ -12,9 +15,11 @@
 
 </style>
 
+<html prefix="og: http://ogp.me/ns#">
 <!-- <html> -->
 	<head>
 		{%- block head %}
+
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166860859-1"></script>
 		<script>
 		  window.dataLayer = window.dataLayer || [];
@@ -24,17 +29,66 @@
 		  gtag('config', 'UA-166860859-1');
 		</script>
 
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
 		<meta name="google-site-verification" content="RfBWOLrUO2Fh-oYsDpOYIk1YtVRuGEI5C1oJ3uK-gxc" />
+		<meta name="yandex-verification" content="#" />
+		<meta name="msvalidate.01" content="#" />
+
+		<meta http-equiv="refresh" url="https://www.travelsafe.live/">
+		<meta name="twitter:card" content="summary">
+		<meta name="twitter:title" content="travelsafe.live - Coronavirus Travel Planner" />
+ 		<meta name="twitter:image" content="https://i.ibb.co/VLpG82s/Screen-Shot-2020-05-22-at-2-30-02-PM.png">
+
+		<meta property="og:description" content="Custom coronavirus data. Search locations, view travel recommendations, create email and text alerts, plan for save travel during the ncov2019.live pandemic.">
+
+		<link rel="canonical" href="https://www.travelsafe.live/">
+		<link rel="alternate" hreflang="en-GB" href="https://www.travelsafe.live/">
+
+		<meta property="og:locale" content="en_GB" />
+		<meta property="og:locale:alternate" content="en_UB" />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="{{ title }}" />
+		<meta property="og:title" content="{{ title }}" />
+		<meta property="og:url" content="https://www.travelsafe.live/" />
+		<meta property="og:determiner" content="TRAVELSAFE" />
+		<meta property="og:image" content="#" />
+		<meta property="og:video" content="#" />
+		<meta property="fb" content="#" />
+
+		<meta name="keywords" lang="us" content="coronavirus, covid-19, travel, tracker, dashboard, preperation, alerts, trends, statistics, data">
+		<meta name="description" content="Custom coronavirus data. Search locations, view travel recommendations, create email and text alerts, plan for save travel during the ncov2019.live pandemic">
+
+		<!-- <boots tags> -->
+		<meta name="robots" content="index, follow"/>
+		<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+		<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+		<!-- <end> -->
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<link rel="apple-touch-icon" href="/favicon.png"/>
 
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 		<link rel="manifest" href="/site.webmanifest">
 
+		<!-- <colors tags> -->
+		<meta name="theme-color" content="#b0c4de">
+		<meta name="msapplication-navbutton-color" content="#b0c4de">
+		<meta name="apple-mobile-web-app-status-bar-style" content="#b0c4de">
+		<!-- <end> -->
+
+		{%- block styles %}
+		<!-- Bootstrap -->
+		<link href="{{bootstrap_find_resource('css/bootstrap.css', cdn='bootstrap')}}" rel="stylesheet">
+		{%- endblock styles %}
+
 		{% if title %}
-		<title> {{ title }} - Microblog</title>
+		<title>travelsafe.live - {{ title }}</title>
 		{% else %}
-		<title> welcome to microblog</title>
+		<title>travelsafe.live</title>
 		{% endif %}
 		{%- endblock head %}
 	</head>
