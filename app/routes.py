@@ -128,7 +128,11 @@ def data():
         print("it's in the USA")
         USA_from = "true"
         state_code = from_array[(len(from_array) - 2)]
-        state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
+        if len(state_code) > 2:
+            state_reference = USReference.query.filter_by(full_state_name=state_code).first()
+            state_code = state_reference.state_abbreviation
+        else:
+            state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
         country_name_from = from_array[(len(from_array) - 1)]
         region_name_from = (state_reference.full_state_name + ", ")
         region_display_from = state_reference.full_state_name
@@ -258,7 +262,11 @@ def data():
         print("it's in the USA")
         USA_to = "true"
         state_code = to_array[(len(to_array) - 2)]
-        state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
+        if len(state_code) > 2:
+            state_reference = USReference.query.filter_by(full_state_name=state_code).first()
+            state_code = state_reference.state_abbreviation
+        else:
+            state_reference = USReference.query.filter_by(state_abbreviation=state_code).first()
         country_name_to = to_array[(len(to_array) - 1)]
         region_name_to = (state_reference.full_state_name + ", ")
         region_display_to = state_reference.full_state_name
