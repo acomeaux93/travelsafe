@@ -71,6 +71,9 @@
 
 	<script type="text/javascript" src="https://www.google.com/jsapi" nonce="{{ csp_nonce() }}"></script>
 	<script src="https://www.gstatic.com/charts/loader.js" nonce="{{ csp_nonce() }}"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.9/datamaps.all.min.js"></script>
 
 
 	{%- block styles %}
@@ -170,6 +173,10 @@
 			font-size: 45%;
 	}
 
+	.big {
+			font-size: 350%;
+	}
+
 
 	</style>
 
@@ -188,14 +195,30 @@
 
 			</div>
 
-			<div class="row border border-secondary">
-				<div class="intro">
-					<h1>When is it safe to travel?</h1>
-					<h2>This is the most current Covid-19 data</h2>
-					<hr>
+			<div class="row border border-secondary intro">
+				<div class="col-md-6 location">
 					<br>
-					<h3>Enter a "From" and "To" location to display Covid-19 infection data for those regions</h3>
+					<br>
+					<h1 class="big">Is it safe to travel?</h1>
+					<br>
+					<h2>This is the most current Covid-19 data</h2>
 				</div>
+
+				<div class="col-md-6 location">
+					<div id="container" style="position: relative; width: 500px; height: 300px;"></div>
+						<script nonce="{{ csp_nonce() }}">
+							var map = new Datamap({
+								element: document.getElementById('container'),
+								fills: {
+	            		defaultFill: '#005eaa' // Any hex, color name or rgb/rgba value
+	        			}
+							});
+						</script>
+				</div>
+			</div>
+
+			<div class="row border border-secondary">
+				<h3>Enter a "From" and "To" location to display Covid-19 infection data for those regions</h3>
 				<div class="col-md-6 location">
 					<h1>Travel From</h1>
 				 	<input type="text" class="form-control" name="from-search-term" id="from-search-term" size="50">

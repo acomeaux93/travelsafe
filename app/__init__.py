@@ -31,7 +31,11 @@ csp = {
         'https://tools.cdc.gov/TemplatePackage/contrib/libs/jquery/1.12.4/jquery.js',
         'https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js',
         'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
-        'https://www.gstatic.com/charts/loader.js'
+        'https://www.gstatic.com/charts/loader.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/datamaps/0.5.9/datamaps.all.min.js'
+
     ],
   'img-src': [
         '*',
