@@ -25,6 +25,8 @@ def save_us_state_data():
     if resp.status_code == 200:
         df = pd.read_csv(us_states_url)
 
+        csv_data=pd.DataFrame(columns=['date','clean_date','state','positive','positive_increase'])
+
         for date, state, positive, positive_increase in zip(df["date"], df["state"], df["positive"], df["positiveIncrease"].fillna(0)):
 
             if positive_increase == "nan":
@@ -66,6 +68,11 @@ def save_us_state_data():
             print(state)
             print(positive_increase)
             print()
+
+            tempdf=pd.DataFrame(date, clean, state, positive, int(positive_increase))
+            csv_data.append(tempdf)
+            print("this is the csv data")
+            print(csv_data)
 
             with app.app_context():
                 us_state_data = USState(date=date, clean_date=clean, state=state, positive=positive, positive_increase=int(positive_increase))

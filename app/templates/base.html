@@ -13,6 +13,10 @@
     color: white;
 }
 
+.hoverchange:hover {
+	background-color: yellow;
+}
+
 </style>
 
 <html prefix="og: http://ogp.me/ns#">
@@ -109,8 +113,8 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('alerts') }}" style="color: white">Get Alerts</a></li>
-                    <li><a href="{{ url_for('contact') }}" style="color: white">Contact</a></li>
+                    <li class="hoverchange"><a class="hoverchange" href="{{ url_for('alerts') }}" style="color: white;">Get Alerts</a></li>
+                    <li><a class="hoverchange" href="{{ url_for('contact') }}" style="color: white;">Contact</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right navbar-custom">
 

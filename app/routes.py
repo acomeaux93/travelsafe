@@ -13,7 +13,7 @@ import os
 
 if not app.debug or os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
     scheduler = BackgroundScheduler()
-    scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=300)
+    scheduler.add_job(func=save_us_state_data, trigger="interval", seconds=60)
     scheduler.start()
 
 @app.route("/sitemap")
